@@ -10,6 +10,8 @@ public class Player1Script : MonoBehaviour {
     public float jump;
 
     float moveVelocity;
+    bool spawnWarhead;
+    Vector3 warheadSpawnPosition;
 
     Rigidbody2D rb;
 
@@ -32,6 +34,7 @@ public class Player1Script : MonoBehaviour {
 
         PlayerMove();
         StartSpawnWarhead();
+        EndSpawnWarhead();
 	}
 
     void PlayerMove()
@@ -60,21 +63,44 @@ public class Player1Script : MonoBehaviour {
 
     void StartSpawnWarhead()
     {
-        float x = Math.Abs(InputManager.AltVertical());
-        float y = Math.Abs(InputManager.AltHorizontal());
+        float y = InputManager.AltVertical();
+        float x = InputManager.AltHorizontal();
         //Debug.Log(Math.Abs(InputManager.AltHorizontal() + Math.Abs(InputManager.AltVertical())));
-        if(x + y > 0.8 )
+        if(Math.Abs(x) + Math.Abs(y) > 0.8 )
         {
             //Instantiate(target, transform.position + new Vector3(TargetDistance* InputManager.AltHorizontal(), TargetDistance * InputManager.AltVertical(),0), Quaternion.identity);
-            float total = x + y;
-            x = x / total;
-            y = y / total;
-            target.transform.position = transform.position + new Vector3(TargetDistance * Math.Sign(InputManager.AltHorizontal())*x, TargetDistance * Math.Sign(InputManager.AltVertical()) * -y, 0);
+            //Debug.Log("x:" + x);
+            //Debug.Log("y:" + y);
+            float theta = (float)Math.Atan(y/x);
+            if(x >= 0)
+            {
+                target.transform.position = transform.position + new Vector3(TargetDistance * (float)Math.Cos(theta), TargetDistance * (float)Math.Sin(theta), 0);
+                warheadSpawnPosition = transform.position + new Vector3(TargetDistance * (float)Math.Cos(theta), TargetDistance * (float)Math.Sin(theta), 0);
+            }
+            else
+            {
+                target.transform.position = transform.position + new Vector3(-TargetDistance * (float)Math.Cos(theta), -TargetDistance * (float)Math.Sin(theta), 0);
+                warheadSpawnPosition = transform.position + new Vector3(-TargetDistance * (float)Math.Cos(theta), -TargetDistance * (float)Math.Sin(theta), 0);
+            }
+            
             target.SetActive(true);
+            spawnWarhead = true;
         }
         else
         {
             target.SetActive(false);
+        }
+    }
+
+    void EndSpawnWarhead()
+    {
+        float y = InputManager.AltVertical();
+        float x = InputManager.AltHorizontal();
+        //Debug.Log(Math.Abs(InputManager.AltHorizontal() + Math.Abs(InputManager.AltVertical())));
+        if (Math.Abs(x) + Math.Abs(y) < 0.8 && spawnWarhead)
+        {
+            Instantiate(missile, warheadSpawnPosition, Quaternion.identity);
+            spawnWarhead = false;
         }
     }
 }
