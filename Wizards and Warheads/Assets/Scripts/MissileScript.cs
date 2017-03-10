@@ -1,31 +1,50 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class MissileScript : MonoBehaviour {
+public class MissileScript : MonoBehaviour
+{
 
     float movespeed = 3;
 
     public GameObject Brick;
 
+    public GameObject GameScriptObj;
 
-    Rigidbody2D BrickCollider;
+    GameScript GameScript;
 
-	// Use this for initialization
-	void Start () {
-        BrickCollider = Brick.GetComponent<Rigidbody2D>();
-	}
-	
-	// Update is called once per frame
-	void Update () {
-        transform.Translate(Vector3.left * Time.deltaTime*movespeed);
+    // Use this for initialization
+    void Start()
+    {
+        GameScript = GameScriptObj.GetComponent<GameScript>();
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        transform.Translate(Vector3.left * Time.deltaTime * movespeed);
     }
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        if(other == BrickCollider)
+        DestroyBricks(other.gameObject);
+    }
+
+    void DestroyBricks(GameObject i_other)
+    {
+        if (i_other.tag == "Brick")
         {
-            Destroy(other.transform.parent.gameObject);
-            Destroy(this);
+            Destroy(i_other.gameObject);
+            Destroy(gameObject);
+        }
+    }
+
+    void DestroyHeart(GameObject i_other)
+    {
+        if (i_other.tag == "Player2Heart")
+        {
+            Destroy(i_other.gameObject);
+            GameScript.Player1Win = true;
         }
     }
 }
+

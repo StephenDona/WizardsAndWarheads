@@ -13,10 +13,13 @@ public class GameScript : MonoBehaviour
     public float wallHorizontalSpread;
     public float wallVerticalSpread;
 
+    public bool Player1Win = false;
+    public GameObject Player1EndText;
+
     // Use this for initialization
     void Start()
     {
-
+        Player1EndText.SetActive(false);
         BuildPlayerWalls();
 
     }
@@ -25,6 +28,14 @@ public class GameScript : MonoBehaviour
     void Update()
     {
 
+    }
+
+    void EndGame()
+    {
+        if(Player1Win)
+        {
+            Player1EndText.SetActive(true);
+        }
     }
 
     void BuildPlayerWalls()

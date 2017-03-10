@@ -8,6 +8,7 @@ public class Player1Script : MonoBehaviour {
     //Movement
     public float speed;
     public float jump;
+    public float launch;
 
     float moveVelocity;
     bool spawnWarhead;
@@ -19,9 +20,16 @@ public class Player1Script : MonoBehaviour {
     public GameObject target;
     public float TargetDistance;
 
+    float screenBottom = -21.0f;
+    Vector3 startPos;
+
+    GameObject ground;
+    bool grounded = false;
+
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
+        startPos = transform.position;
         // Use this for initialization
     }
 
@@ -35,7 +43,10 @@ public class Player1Script : MonoBehaviour {
         PlayerMove();
         StartSpawnWarhead();
         EndSpawnWarhead();
-	}
+        DetonateBomb();
+        Respawn();
+
+    }
 
     void PlayerMove()
     {
@@ -102,5 +113,40 @@ public class Player1Script : MonoBehaviour {
             Instantiate(missile, warheadSpawnPosition, Quaternion.identity);
             spawnWarhead = false;
         }
+    }
+
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        ground = other.gameObject;
+        grounded = true;
+    }
+
+    void OnTriggerExit2D()
+    {
+        grounded = false;
+    }
+
+
+    void DetonateBomb()
+    {
+        if (InputManager.Bbutton())
+        {
+            if(grounded && ground.tag == "Missile")
+            {
+                Destroy(ground);
+                ground = null;
+                rb.velocity = new Vector2(rb.velocity.x, launch);
+            }
+            
+        }
+    }
+
+    void Respawn()
+    {
+        if(transform.position.y < screenBottom)
+        {
+            transform.position = startPos;
+        }
+
     }
 }
