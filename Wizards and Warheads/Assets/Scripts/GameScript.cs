@@ -6,6 +6,7 @@ public class GameScript : MonoBehaviour
 
 
     public GameObject Player2WallStart;
+    public GameObject Player1WallStart;
     public GameObject Brick;
 
     public int wallThick;
@@ -13,8 +14,10 @@ public class GameScript : MonoBehaviour
     public float wallHorizontalSpread;
     public float wallVerticalSpread;
 
-    public bool Player1Win = false;
+    public static bool Player1Win = false;
     public GameObject Player1EndText;
+    public static int player1Missiles;
+    public static int player2Missiles;
 
     // Use this for initialization
     void Start()
@@ -27,7 +30,7 @@ public class GameScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        Debug.Log("Player1 Missiles: " + player2Missiles + " Player2 Missiles: " + player2Missiles);
     }
 
     void EndGame()
@@ -52,6 +55,20 @@ public class GameScript : MonoBehaviour
             }
             buildLocation.y = buildLocation.y - wallVerticalSpread;
             buildLocation.x = buildLocation.x - wallThick * wallHorizontalSpread;
+        }
+
+        buildLocation = Player1WallStart.transform.position;
+
+        for (int i = 0; i < wallHeight; i++)
+        {
+            for (int k = 0; k < wallThick; k++)
+            {
+                Instantiate(Brick, buildLocation, Quaternion.identity);
+                buildLocation.x = buildLocation.x - wallHorizontalSpread;
+
+            }
+            buildLocation.y = buildLocation.y - wallVerticalSpread;
+            buildLocation.x = buildLocation.x + wallThick * wallHorizontalSpread;
         }
     }
 

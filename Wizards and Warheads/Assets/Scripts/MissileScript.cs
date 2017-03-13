@@ -4,29 +4,45 @@ using System.Collections;
 public class MissileScript : MonoBehaviour
 {
 
-    float movespeed = 3;
+    public float movespeed;
+    public int playerMissile;
 
     public GameObject Brick;
-
-    public GameObject GameScriptObj;
-
-    GameScript GameScript;
 
     // Use this for initialization
     void Start()
     {
-        GameScript = GameScriptObj.GetComponent<GameScript>();
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        transform.Translate(Vector3.left * Time.deltaTime * movespeed);
+        MissileMove();
+        SelfDestroy();
+    }
+    
+    void MissileMove()
+    {
+        if(playerMissile == 1)
+        {
+            transform.Translate(Vector3.left * Time.deltaTime * movespeed);
+        }
+        else if(playerMissile == 2)
+        {
+            transform.Translate(Vector3.right * Time.deltaTime * movespeed);
+        }
+        else
+        {
+
+        }
     }
 
     void OnTriggerEnter2D(Collider2D other)
     {
         DestroyBricks(other.gameObject);
+        DestroyHeart(other.gameObject);
+        DestroyMissiles(other.gameObject);
     }
 
     void DestroyBricks(GameObject i_other)
@@ -35,6 +51,20 @@ public class MissileScript : MonoBehaviour
         {
             Destroy(i_other.gameObject);
             Destroy(gameObject);
+            TallyMissiles();
+
+
+        }
+    }
+
+    void DestroyMissiles(GameObject i_other)
+    {
+        if (i_other.tag == "Missile")
+        {
+            Destroy(i_other.gameObject);
+            Destroy(gameObject);
+            GameScript.player2Missiles--;
+            GameScript.player1Missiles--;
         }
     }
 
@@ -43,7 +73,34 @@ public class MissileScript : MonoBehaviour
         if (i_other.tag == "Player2Heart")
         {
             Destroy(i_other.gameObject);
+            Destroy(gameObject);
+            TallyMissiles();
             GameScript.Player1Win = true;
+        }
+    }
+
+    void SelfDestroy()
+    {
+        if(transform.position.x <-35 )
+        {
+            Destroy(gameObject);
+            TallyMissiles();
+        }
+    }
+
+    void TallyMissiles()
+    {
+        if (playerMissile == 1)
+        {
+            GameScript.player1Missiles--;
+        }
+        else if (playerMissile == 2)
+        {
+            GameScript.player2Missiles--;
+        }
+        else
+        {
+            Debug.Log("ERROR: MISSILE HAS NO PLAYER");
         }
     }
 }

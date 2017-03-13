@@ -3,7 +3,7 @@ using System.Collections;
 using System;
 
 
-public class Player1Script : MonoBehaviour
+public class Player2Script : MonoBehaviour
 {
 
     //Movement
@@ -22,7 +22,7 @@ public class Player1Script : MonoBehaviour
     public GameObject missile;
     public GameObject target;
     public float TargetDistance;
-    public int player1MissileMax;
+    public int player2MissileMax;
 
     float screenBottom = -21.0f;
     Vector3 startPos;
@@ -59,12 +59,12 @@ public class Player1Script : MonoBehaviour
     void PlayerMove()
     {
 
-        if (InputManager.P1MainHorizontal() < -0.5f)
+        if (InputManager.P2MainHorizontal() < -0.5f)
         {
             moveVelocity = -speed;
             rb.velocity = new Vector2(moveVelocity, rb.velocity.y);
         }
-        else if (InputManager.P1MainHorizontal() > 0.5f)
+        else if (InputManager.P2MainHorizontal() > 0.5f)
         {
             moveVelocity = speed;
             rb.velocity = new Vector2(moveVelocity, rb.velocity.y);
@@ -74,7 +74,7 @@ public class Player1Script : MonoBehaviour
             rb.velocity = new Vector2(0, rb.velocity.y);
         }
 
-        if (InputManager.P1Abutton())
+        if (InputManager.P2Abutton())
         {
             PlayerJump();
         }
@@ -93,8 +93,8 @@ public class Player1Script : MonoBehaviour
 
     void StartSpawnWarhead()
     {
-        float y = InputManager.P1AltVertical();
-        float x = InputManager.P1AltHorizontal();
+        float y = InputManager.P2AltVertical();
+        float x = InputManager.P2AltHorizontal();
         //Debug.Log(Math.Abs(InputManager.AltHorizontal() + Math.Abs(InputManager.AltVertical())));
         if (Math.Abs(x) + Math.Abs(y) > 0.8)
         {
@@ -124,15 +124,15 @@ public class Player1Script : MonoBehaviour
 
     void EndSpawnWarhead()
     {
-        float y = InputManager.P1AltVertical();
-        float x = InputManager.P1AltHorizontal();
+        float y = InputManager.P2AltVertical();
+        float x = InputManager.P2AltHorizontal();
         //Debug.Log(Math.Abs(InputManager.AltHorizontal() + Math.Abs(InputManager.AltVertical())));
         if (Math.Abs(x) + Math.Abs(y) < 0.8 && spawnWarhead)
         {
-            if (GameScript.player1Missiles < player1MissileMax)
+            if (GameScript.player2Missiles < player2MissileMax)
             {
                 Instantiate(missile, warheadSpawnPosition, Quaternion.identity);
-                GameScript.player1Missiles++;
+                GameScript.player2Missiles++;
             }
 
             spawnWarhead = false;
@@ -154,12 +154,12 @@ public class Player1Script : MonoBehaviour
 
     void DetonateBomb()
     {
-        if (InputManager.P1Bbutton())
+        if (InputManager.P2Bbutton())
         {
             if (grounded && ground.tag == "Missile")
             {
                 Destroy(ground);
-                GameScript.player1Missiles--;
+                GameScript.player2Missiles--;
                 ground = null;
                 rb.velocity = new Vector2(rb.velocity.x, launch);
             }
