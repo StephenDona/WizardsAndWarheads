@@ -15,6 +15,7 @@ public class GameScript : MonoBehaviour
     public float wallVerticalSpread;
 
     public static bool Player1Win = false;
+    public static bool Player2Win = false;
     public GameObject Player1EndText;
     public static int player1Missiles;
     public static int player2Missiles;

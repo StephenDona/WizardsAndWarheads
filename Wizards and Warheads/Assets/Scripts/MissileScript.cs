@@ -52,8 +52,6 @@ public class MissileScript : MonoBehaviour
             Destroy(i_other.gameObject);
             Destroy(gameObject);
             TallyMissiles();
-
-
         }
     }
 
@@ -75,13 +73,26 @@ public class MissileScript : MonoBehaviour
             Destroy(i_other.gameObject);
             Destroy(gameObject);
             TallyMissiles();
-            GameScript.Player1Win = true;
+
+            if (playerMissile == 1)
+            {
+                GameScript.Player1Win = true;
+            }
+            else if (playerMissile == 2)
+            {
+                GameScript.Player2Win = true;
+            }
+            else
+            {
+                Debug.Log("ERROR: MISSILE HAS NO PLAYER");
+            }
+            
         }
     }
 
     void SelfDestroy()
     {
-        if(transform.position.x <-35 )
+        if(transform.position.x <-35 || transform.position.x > 35)
         {
             Destroy(gameObject);
             TallyMissiles();
