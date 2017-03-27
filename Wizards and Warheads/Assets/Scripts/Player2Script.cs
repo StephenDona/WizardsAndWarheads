@@ -21,6 +21,7 @@ public class Player2Script : MonoBehaviour
 
     public GameObject missile;
     public GameObject target;
+    public GameObject OutOfScreenMarker;
     public float TargetDistance;
     public int player2MissileMax;
 
@@ -53,6 +54,7 @@ public class Player2Script : MonoBehaviour
         DetonateBomb();
         Respawn();
         CorrectRotation();
+        OutOfScreenRender();
 
     }
 
@@ -71,8 +73,16 @@ public class Player2Script : MonoBehaviour
         }
         else
         {
-            rb.velocity = new Vector2(0, rb.velocity.y);
+            if (grounded && ground.tag == "Missile")
+            {
+                rb.velocity = ground.GetComponent<Rigidbody2D>().velocity;
+            }
+            else
+            {
+                rb.velocity = new Vector2(0, rb.velocity.y);
+            }
         }
+    
 
         if (InputManager.P2Abutton())
         {
@@ -131,8 +141,15 @@ public class Player2Script : MonoBehaviour
         {
             if (GameScript.player2Missiles < player2MissileMax)
             {
-                Instantiate(missile, warheadSpawnPosition, Quaternion.identity);
-                GameScript.player2Missiles++;
+                if (warheadSpawnPosition.x > 35 || warheadSpawnPosition.x < -35 || warheadSpawnPosition.y > 21 || warheadSpawnPosition.y < -18)
+                {
+
+                }
+                else
+                {
+                    Instantiate(missile, warheadSpawnPosition, Quaternion.identity);
+                    GameScript.player2Missiles++;
+                }
             }
 
             spawnWarhead = false;
@@ -158,8 +175,9 @@ public class Player2Script : MonoBehaviour
         {
             if (grounded && ground.tag == "Missile")
             {
+                ground.GetComponent<MissileScript>().TallyMissiles();
                 Destroy(ground);
-                GameScript.player2Missiles--;
+
                 ground = null;
                 rb.velocity = new Vector2(rb.velocity.x, launch);
             }
@@ -181,6 +199,19 @@ public class Player2Script : MonoBehaviour
         if(transform.rotation.z != 0)
         {
             transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.identity, Time.time * 100);
+        }
+    }
+
+    void OutOfScreenRender()
+    {
+        if(transform.position.y > 23)
+        {
+            OutOfScreenMarker.SetActive(true);
+            OutOfScreenMarker.transform.position = new Vector3(transform.position.x, 20.0f, 23.65f);
+        }
+        else
+        {
+            OutOfScreenMarker.SetActive(false);
         }
     }
 }

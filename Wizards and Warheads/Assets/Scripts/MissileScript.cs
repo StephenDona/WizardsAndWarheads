@@ -1,18 +1,26 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class MissileScript : MonoBehaviour
 {
 
     public float movespeed;
     public int playerMissile;
+    public float launch;
+
+    Rigidbody2D rb;
+
+    public bool MarkedForDetonation;
 
     public GameObject Brick;
+
+    List<Rigidbody2D> MissileRiders;
 
     // Use this for initialization
     void Start()
     {
-
+        rb = GetComponent<Rigidbody2D>();
     }
 
     // Update is called once per frame
@@ -20,17 +28,21 @@ public class MissileScript : MonoBehaviour
     {
         MissileMove();
         SelfDestroy();
+        //if(MarkedForDetonation)
+        //{
+        //    Detonate();
+        //}
     }
     
     void MissileMove()
     {
         if(playerMissile == 1)
         {
-            transform.Translate(Vector3.left * Time.deltaTime * movespeed);
+            rb.velocity = new Vector2(-movespeed, rb.velocity.y);
         }
         else if(playerMissile == 2)
         {
-            transform.Translate(Vector3.right * Time.deltaTime * movespeed);
+            rb.velocity = new Vector2(movespeed, rb.velocity.y);
         }
         else
         {
@@ -43,7 +55,23 @@ public class MissileScript : MonoBehaviour
         DestroyBricks(other.gameObject);
         DestroyHeart(other.gameObject);
         DestroyMissiles(other.gameObject);
+        //AddRider(other.gameObject);
     }
+
+    void OnTriggerExit2D(Collider2D other)
+    {
+        //RemoveRider(other.gameObject);
+    }
+
+    //void Detonate()
+    //{
+    //    Destroy(this);
+    //    TallyMissiles();
+    //    for(int i=0; i<MissileRiders.Count; i++)
+    //    {
+    //        MissileRiders[i].velocity = new Vector2(rb.velocity.x, launch);
+    //    }
+    //}
 
     void DestroyBricks(GameObject i_other)
     {
@@ -99,7 +127,7 @@ public class MissileScript : MonoBehaviour
         }
     }
 
-    void TallyMissiles()
+    public void TallyMissiles()
     {
         if (playerMissile == 1)
         {
@@ -114,5 +142,22 @@ public class MissileScript : MonoBehaviour
             Debug.Log("ERROR: MISSILE HAS NO PLAYER");
         }
     }
+
+    //void AddRider(GameObject Rider)
+    //{
+    //    if (Rider.tag == "Player")
+    //    {
+    //        Rigidbody2D AddedRider = Rider.GetComponent<Rigidbody2D>();
+    //        MissileRiders.Add(AddedRider);
+    //    }
+            
+    //}
+    //void RemoveRider(GameObject Rider)
+    //{
+    //    if (Rider.tag == "Player")
+    //    {
+    //        MissileRiders.Remove(Rider.GetComponent<Rigidbody2D>());
+    //    }
+    //}
 }
 

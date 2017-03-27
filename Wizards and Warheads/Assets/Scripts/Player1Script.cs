@@ -21,13 +21,14 @@ public class Player1Script : MonoBehaviour
 
     public GameObject missile;
     public GameObject target;
+    public GameObject OutOfScreenMarker;
     public float TargetDistance;
     public int player1MissileMax;
 
     float screenBottom = -21.0f;
     Vector3 startPos;
 
-    GameObject ground;
+    GameObject ground1;
     bool grounded = false;
 
 
@@ -53,6 +54,7 @@ public class Player1Script : MonoBehaviour
         DetonateBomb();
         Respawn();
         CorrectRotation();
+        OutOfScreenRender();
 
     }
 
@@ -71,7 +73,15 @@ public class Player1Script : MonoBehaviour
         }
         else
         {
-            rb.velocity = new Vector2(0, rb.velocity.y);
+            if (grounded && ground1.tag == "Missile")
+            {
+                rb.velocity = ground1.GetComponent<Rigidbody2D>().velocity;
+            }
+            else
+            {
+                rb.velocity = new Vector2(0, rb.velocity.y);
+            }
+
         }
 
         if (InputManager.P1Abutton())
@@ -79,7 +89,9 @@ public class Player1Script : MonoBehaviour
             PlayerJump();
         }
 
-        
+
+
+
     }
 
     void PlayerJump()
@@ -131,8 +143,16 @@ public class Player1Script : MonoBehaviour
         {
             if (GameScript.player1Missiles < player1MissileMax)
             {
-                Instantiate(missile, warheadSpawnPosition, Quaternion.identity);
-                GameScript.player1Missiles++;
+                if (warheadSpawnPosition.x > 35 || warheadSpawnPosition.x < -35 || warheadSpawnPosition.y > 21 || warheadSpawnPosition.y < -18)
+                {
+
+                }
+                else
+                {
+                    Instantiate(missile, warheadSpawnPosition, Quaternion.identity);
+                    GameScript.player1Missiles++;
+                }
+
             }
 
             spawnWarhead = false;
@@ -141,7 +161,7 @@ public class Player1Script : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        ground = other.gameObject;
+        ground1 = other.gameObject;
         grounded = true;
         jumpNum = 0;
     }
@@ -156,11 +176,12 @@ public class Player1Script : MonoBehaviour
     {
         if (InputManager.P1Bbutton())
         {
-            if (grounded && ground.tag == "Missile")
+            if (grounded && ground1.tag == "Missile")
             {
-                Destroy(ground);
-                GameScript.player1Missiles--;
-                ground = null;
+                ground1.GetComponent<MissileScript>().TallyMissiles();
+                Destroy(ground1);
+
+                ground1 = null;
                 rb.velocity = new Vector2(rb.velocity.x, launch);
             }
 
@@ -178,10 +199,24 @@ public class Player1Script : MonoBehaviour
 
     void CorrectRotation()
     {
-        if(transform.rotation.z != 0)
+        if (transform.rotation.z != 0)
         {
             transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.identity, Time.time * 100);
         }
+    }
+
+    void OutOfScreenRender()
+    {
+        if (transform.position.y > 23)
+        {
+            OutOfScreenMarker.SetActive(true);
+            OutOfScreenMarker.transform.position = new Vector3(transform.position.x, 20.0f, 23.65f);
+        }
+        else
+        {
+            OutOfScreenMarker.SetActive(false);
+        }
+
     }
 }
 
