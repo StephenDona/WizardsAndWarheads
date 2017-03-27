@@ -22,6 +22,7 @@ public class Player2Script : MonoBehaviour
     public GameObject missile;
     public GameObject target;
     public GameObject OutOfScreenMarker;
+    public GameObject Shockwave;
     public float TargetDistance;
     public int player2MissileMax;
 
@@ -176,10 +177,10 @@ public class Player2Script : MonoBehaviour
             if (grounded && ground.tag == "Missile")
             {
                 ground.GetComponent<MissileScript>().TallyMissiles();
+                Instantiate(Shockwave, ground.transform.position, Quaternion.identity);
                 Destroy(ground);
 
                 ground = null;
-                rb.velocity = new Vector2(rb.velocity.x, launch);
             }
 
         }

@@ -22,6 +22,7 @@ public class Player1Script : MonoBehaviour
     public GameObject missile;
     public GameObject target;
     public GameObject OutOfScreenMarker;
+    public GameObject Shockwave;
     public float TargetDistance;
     public int player1MissileMax;
 
@@ -73,9 +74,13 @@ public class Player1Script : MonoBehaviour
         }
         else
         {
-            if (grounded && ground1.tag == "Missile")
+
+            if (grounded && ground1 != null)
             {
-                rb.velocity = ground1.GetComponent<Rigidbody2D>().velocity;
+                if(ground1.tag == "Missile")
+                {
+                    rb.velocity = ground1.GetComponent<Rigidbody2D>().velocity;
+                }               
             }
             else
             {
@@ -179,10 +184,10 @@ public class Player1Script : MonoBehaviour
             if (grounded && ground1.tag == "Missile")
             {
                 ground1.GetComponent<MissileScript>().TallyMissiles();
+                Instantiate(Shockwave, ground1.transform.position, Quaternion.identity);
                 Destroy(ground1);
 
                 ground1 = null;
-                rb.velocity = new Vector2(rb.velocity.x, launch);
             }
 
         }

@@ -14,6 +14,7 @@ public class MissileScript : MonoBehaviour
     public bool MarkedForDetonation;
 
     public GameObject Brick;
+    public GameObject Shockwave;
 
     List<Rigidbody2D> MissileRiders;
 
@@ -77,6 +78,7 @@ public class MissileScript : MonoBehaviour
     {
         if (i_other.tag == "Brick")
         {
+            Instantiate(Shockwave, transform.position, Quaternion.identity);
             Destroy(i_other.gameObject);
             Destroy(gameObject);
             TallyMissiles();
@@ -87,16 +89,16 @@ public class MissileScript : MonoBehaviour
     {
         if (i_other.tag == "Missile")
         {
+            Instantiate(Shockwave, (transform.position+i_other.transform.position)/2, Quaternion.identity);
             Destroy(i_other.gameObject);
             Destroy(gameObject);
-            GameScript.player2Missiles--;
-            GameScript.player1Missiles--;
+            TallyMissiles();
         }
     }
 
     void DestroyHeart(GameObject i_other)
     {
-        if (i_other.tag == "Player2Heart")
+        if (i_other.tag == "Player2Heart" || i_other.tag == "Player1Heart")
         {
             Destroy(i_other.gameObject);
             Destroy(gameObject);
