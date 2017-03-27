@@ -154,7 +154,7 @@ public class Player1Script : MonoBehaviour
                 }
                 else
                 {
-                    Instantiate(missile, warheadSpawnPosition, Quaternion.identity);
+                    Instantiate(missile, warheadSpawnPosition, Quaternion.Euler(0, 0, 180.0f));
                     GameScript.player1Missiles++;
                 }
 
