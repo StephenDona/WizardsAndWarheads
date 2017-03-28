@@ -85,7 +85,7 @@ public class MissileScript : MonoBehaviour
         }
     }
 
-    void DestroyMissiles(GameObject i_other)
+    public void  DestroyMissiles(GameObject i_other)
     {
         if (i_other.tag == "Missile")
         {

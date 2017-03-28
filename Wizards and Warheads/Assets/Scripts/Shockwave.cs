@@ -41,5 +41,10 @@ public class Shockwave : MonoBehaviour {
             Vector3 launchVector = (launchSpeed * pushVector.normalized) / collider.radius;
             other.GetComponent<Rigidbody2D>().velocity = launchVector;
         }
+
+        if (other.tag == "Missile")
+        {
+            other.GetComponent<MissileScript>().DestroyMissiles(other.gameObject);
+        }
     }
 }

@@ -31,7 +31,7 @@ public class GameScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Debug.Log("Player1 Missiles: " + player2Missiles + " Player2 Missiles: " + player2Missiles);
+        Debug.Log("Player1 Missiles: " + player1Missiles + " Player2 Missiles: " + player2Missiles);
     }
 
     void EndGame()
