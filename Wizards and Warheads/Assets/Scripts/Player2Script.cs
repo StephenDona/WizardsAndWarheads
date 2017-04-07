@@ -53,7 +53,7 @@ public class Player2Script : MonoBehaviour
         StartSpawnWarhead();
         EndSpawnWarhead();
         DetonateBomb();
-        Respawn();
+        FallenCheck();
         CorrectRotation();
         OutOfScreenRender();
 
@@ -186,11 +186,11 @@ public class Player2Script : MonoBehaviour
         }
     }
 
-    void Respawn()
+    void FallenCheck()
     {
         if (transform.position.y < screenBottom)
         {
-            transform.position = startPos;
+            Player2Respawn();
         }
 
     }
@@ -214,6 +214,11 @@ public class Player2Script : MonoBehaviour
         {
             OutOfScreenMarker.SetActive(false);
         }
+    }
+
+    public void Player2Respawn()
+    {
+        transform.position = startPos;
     }
 }
 

@@ -13,7 +13,6 @@ public class MissileScript : MonoBehaviour
 
     public bool MarkedForDetonation;
 
-    public GameObject Brick;
     public GameObject Shockwave;
 
     List<Rigidbody2D> MissileRiders;
@@ -79,7 +78,7 @@ public class MissileScript : MonoBehaviour
         if (i_other.tag == "Brick")
         {
             Instantiate(Shockwave, transform.position, Quaternion.identity);
-            Destroy(i_other.gameObject);
+            i_other.gameObject.SetActive(false);
             Destroy(gameObject);
             TallyMissiles();
         }

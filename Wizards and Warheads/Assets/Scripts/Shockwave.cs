@@ -35,7 +35,7 @@ public class Shockwave : MonoBehaviour {
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        if(other.tag == "Player")
+        if(other.tag == "Player"|| other.tag == "Player2")
         {
             Vector3 pushVector = other.gameObject.transform.position - transform.position;
             Vector3 launchVector = (launchSpeed * pushVector.normalized) / collider.radius;
