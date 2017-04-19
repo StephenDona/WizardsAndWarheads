@@ -12,6 +12,7 @@ public class AbsorberScript : MonoBehaviour {
     GameObject player2;
     Player1Script player1Script;
     Player2Script player2Script;
+    ParticleSystem Glower;
 
 	// Use this for initialization
 	void Start () {
@@ -19,7 +20,9 @@ public class AbsorberScript : MonoBehaviour {
         player2 = GameObject.FindWithTag("Player2");
         player1Script = player1.GetComponent<Player1Script>();
         player2Script = player2.GetComponent<Player2Script>();
-	}
+        Glower = this.gameObject.GetComponent<ParticleSystem>();
+        Glower.Stop();
+    }
 	
 	// Update is called once per frame
 	void Update () {
@@ -61,10 +64,12 @@ public class AbsorberScript : MonoBehaviour {
         if(Brick.activeSelf)
         {
             this.GetComponent<CircleCollider2D>().enabled = false;
+            Glower.Stop();
         }
         else
         {
             this.GetComponent<CircleCollider2D>().enabled = true;
+            Glower.Play();
         }
     }
 }
